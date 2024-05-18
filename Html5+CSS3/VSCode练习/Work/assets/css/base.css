@@ -1,0 +1,10 @@
+/* 清楚默认样式并设置通用样式 */
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+li{
+    list-style: none;
+}
+

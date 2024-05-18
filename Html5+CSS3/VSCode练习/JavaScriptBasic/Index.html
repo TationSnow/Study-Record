@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScript练习</title>
+    <style>
+        
+        h1,table{
+            height: 80px;
+            margin: 0 auto;
+            border-collapse: collapse;
+            text-align: center;
+        }
+        th,td{
+            width: 100px;
+            border: 1px black solid;
+        }
+    </style>
+</head>
+<body>
+     
+    <h1>订单确认</h1>
+    <table>
+    <tr>
+        <th>商品名称</th>
+        <th>商品价格</th>
+        <th>商品数量</th>
+        <th>总价</th>
+        <th>收货地址</th>
+    </tr>    
+    <tr>
+        <td>
+            <script>
+                //let name = prompt('请输入名称')
+                document.write(`${name}`)
+            </script>
+        </td>
+        <td>
+            <script>
+                //let price = prompt('请输入价格')
+                document.write(`${price}元`)
+            </script>
+        </td>
+        <td>${count}</td>
+        <td>${totalPrice}</td>
+        <td>${address}</td>
+    </tr>   
+    
+    </table>
+    <script>
+        //需求：用户输入商品价格和商品数量，以及收货地址，可以自动打印订单信息
+        // let name = '小米手机青春版'
+        // let price = prompt('请输入商品价格')
+        // let count = prompt('请输入要购买的数量')
+        // let totalPrice = Number(price) * Number(price)
+        // let address = prompt('请输入收货地址')
+        
+        // document.write(`
+        // <h1>订单确认</h1>
+        // <table>
+        // <tr>
+        //     <th>商品名称</th>
+        //     <th>商品价格</th>
+        //     <th>商品数量</th>
+        //     <th>总价</th>
+        //     <th>收货地址</th>
+        // </tr>    
+        // <tr>
+        //     <td>${name}</td>
+        //     <td>${price}元</td>
+        //     <td>${count}</td>
+        //     <td>${totalPrice}</td>
+        //     <td>${address}</td>
+        // </tr>   
+        // </table>
+        // `)
+        
+        //需求：输入一个数判断这个数能被4整除，但是不能被100整除，满足条件，弹出true 否则弹出false
+
+        //let num = +prompt('请输入一个数字')
+        // if((num % 4 === 0) && (num % 100 !== 0)){
+        //     alert('true')
+        // }else{
+        //     alert('false')
+        // }
+        //alert(num % 4 === 0 && num % 100 != 0)
+
+
+    </script>
+</body>
+</html>
