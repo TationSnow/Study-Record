@@ -1499,11 +1499,13 @@ print(newarr)
 
 ## Opeartion - 数组迭代
 
+### 1. NumPy 数组迭代
+
 迭代意味着要逐一遍历数组
 
 当我们在NumPy中处理多维数组的时候，可以使用Python中基本的for循环来实现此操作。
 
-### 1. 迭代 1-D 数组
+#### 1.1 迭代 1-D 数组
 
 如果我们对1-D数组进行迭代，它将会逐一遍历每一个元素
 
@@ -1519,7 +1521,7 @@ for x in arr:
 
 
 
-### 2. 迭代 2-D数组
+#### 1.2 迭代 2-D数组
 
 在2-D数组中，它将会遍历所有行
 
@@ -1541,7 +1543,7 @@ for x in arr:
 
 
 
-### 3. 使用nditer()迭代数组
+#### 1.3 使用nditer()迭代数组
 
 函数nditer()是一个辅助函数，从非常基本的迭代到非常高级的迭代都可以使用，他解决了我们在迭代中面临的一些基本问题，让我们通过一个例子来进行介绍
 
@@ -1550,14 +1552,14 @@ for x in arr:
 ```python
 arr = np.array([[[1,2,3],[1,1,2]],[[1,12],[3,4,1]]])
 
-for x in np.nditer(arr)
+for x in np.nditer(arr):
 	print(x)
 ```
 
 
 
 
-### 4.迭代不同数据类型的数组
+#### 1.4迭代不同数据类型的数组
 
 我们额可以使用op_dtypes参数，并传递期望的数据类型，以在迭代时改变元素的数据类型
 
@@ -1566,6 +1568,434 @@ NumPy不会就地更改元素的数据类型（元素位于数组中），因此
 ```python
 arr = np.array([1,2,3])
 
-for x in np.nditer(arr)
+for x in np.nditer(arr,flags=['buffered'],op_dtypes=['S']):
+	print(x)
 ```
 
+
+
+#### 1.5 以不同的步长迭代
+
+我们可以使用过滤，然后进行迭代
+
+```python
+# 每遍历2D数组的一个标量元素，跳过一个元素
+arr = np.arrar([1,2,3,4],[5,6,7,8])
+for x in np.nditer(arr[:,::2]):
+    print(x)
+```
+
+
+
+#### 1.6 使用ndenumerate()进行枚举迭代（索引）
+
+枚举是指逐一提及事务的序号
+
+有时，我们在迭代时需要元素的相应索引，对于这些用例，可以使用ndenumerate()方法
+
+```python
+arr = np.array([1,2,3])
+
+for idx,x in np.ndenumerate(arr):
+    print(idx,x)
+```
+
+
+
+### 2. NumPy 数组连接
+
+#### 2.1 链接NumPy数组
+
+连接意味着将两个或多个数组的内容放在单个数组中，
+
+在SQL中我们基于键来连接表，而在NumPy中，我们按轴连接数组
+
+我们传递了一系列要与轴一起连接到concatenate()函数的数组，如果未显示传递轴，则将其视为0
+
+```python
+arr1 = np.array([[1,2],[3,4]])
+arr2 = np.array([[5,6],[7,8]])
+
+arr = np.concatenate((arr1,arr2))
+print(arr,arr.shape)
+```
+
+
+
+```Python
+# 沿着行(axis=1)连接两个2-D数组
+arr = np.concatenate((arr1,arr2),axis=1)
+print(arr,arr.shape)
+```
+
+
+
+#### 2.2 使用堆栈函数链接数组
+
+堆栈与级联相同，唯一不同的是堆栈是沿着新轴完成的。
+
+我们可以沿着第二个轴连接两个一维数组，这将会导致他们彼此重叠，即堆叠stacking
+
+我们传递了一系列要与轴一起连接到concatenate()方法的数组，如果未显示传递轴，则将其视为0
+
+```python
+arr = np.stack((arr1,arr2),axis = 0)
+print(arr,arr.shape)
+```
+
+```python
+arr = np.stack((arr1,arr2),axis = 1)
+print(arr,arr.shape)
+```
+
+
+
+
+
+#### 2.3 沿行折叠
+
+NumPy提供了一个辅助函数：hstack()沿行堆叠。
+
+```Python
+arr = np.hstack((arr1,arr2))
+print(arr,arr.shape)
+```
+
+
+
+#### 2.4 沿行折叠
+
+NumPy提供了一个辅助函数：vstack()沿列堆叠
+
+```python
+arr = np.vstack((arr1,arr2))
+print(arr,arr.shape)
+```
+
+
+
+#### 2.5 沿高度折叠（深度）
+
+NumPy提供了一个辅助函数：dstack()沿高度堆叠
+
+```python
+arr = np.dstack((arr1,arr2))
+print(arr,arr.shape)
+```
+
+
+
+### 3. NumPy 数组拆分
+
+#### 3.1 拆分NumPy数组
+
+拆分是连续的反向操作
+
+连接是将多个数组合并为一个，拆分(Splitting)将一个数组拆分为多个
+
+我们使用array_split()分割数组，将要分割的数组和分割数传递给他。
+
+```python
+arr = np.arrar([1,2,3,4,5,6])
+
+newarr = np.split(arr,3)
+print(newarr)
+# 返回值是一个包含3个数组的数组
+```
+
+```python
+print(newarr[0])
+print(newarr[1])
+print(newarr[2])
+```
+
+```python
+newarr = np.array_split(arr,4)
+print(newarr)
+# 用array_split进行拆分时，数量不够也会帮你拆分，但是不会是平均
+```
+
+```python
+newarr = np.split(arr,4)
+print(newarr)
+# 用split进行拆分时，数量不够拆分会报错
+```
+
+
+
+#### 3.2 分割二维数组
+
+拆分二维数组时，请使用相同的语法
+
+使用array_split()方法，传入要分割的数组和想要分割的数目
+
+利用axis参数可以按照行列来进行分割等额外操作
+
+```python
+arr = np.array([[1,2],[3,4],[5,6],[7,8],[9,10],[11,12]])
+print(arr.shape)
+
+newarr = np.array_split(arr,3)
+print(newarr)
+```
+
+```python
+# 通过axis参数控制分割方向
+arr = np.array([[1,2],[3,4],[5,6],[7,8],[9,10],[11,12]])
+print(arr.shape)
+
+newarr = np.array_split(arr,2,axis=1)
+print(newarr)
+```
+
+```python
+# 使用hsplit进行分割
+arr = np.array([[1,2],[3,4],[5,6],[7,8],[9,10],[11,12]])
+print(arr.shape)
+
+newarr = np.hsplit(arr,2)
+print(newarr)
+```
+
+
+
+### 4. NumPy数组搜索
+
+
+
+#### 4.1 搜索数组
+
+可以在数组中搜索（检索）某个值，然后获取匹配的索引。
+
+要搜索数组，请用where()方法
+
+```python
+arr = np.array([1,2,3,4,5,4,4])
+x = np.where(arr == 4)
+print(x)
+# 值4出现在索引 3,5，6
+```
+
+```python
+arr = np.array([1,2,3,4,5,6,7,8])
+# 查找值为偶数的索引
+x = np.where(arr%2 == 0)
+print(x)
+```
+
+```python
+arr = np.array([1,2,3,4,5,6,7,8])
+# 查找值为奇数的索引
+x = np.where(arr%2 == 1)
+print(x)
+```
+
+
+
+
+
+
+
+#### 4.2 搜索排序
+
+有一个名为searchsorted()方法，该方法在数组中执行二进制搜索，并且返回将在其中指定值以维持搜索顺序的索引。
+
+假定searchsorted()方法用于排序数组
+
+left
+
+a[i-1] < v < a[i]
+
+right
+
+a[i-1] <= v <a[i]
+
+```python
+# 该方法从左侧开始搜索并返回第一个索引，其中数字9不在大于下一个值
+arr = np.array(6,8,9,15)
+x = np.searchsorted(arr,9)
+```
+
+```python
+# 该方法从右侧开始搜索并返回第一个索引，其中数字9不在小于下一个值
+arr = np.array(6,8,9,15)
+x = np.searchsorted(arr,9,side='right')
+```
+
+
+
+#### 4.3 多个值
+
+要搜索多个值，得使用拥有指定值的数组
+
+```python
+arr = np.array([1,3,5,6])
+x = np.searchsorted(arr,[2,4,6])
+print(x)
+```
+
+
+
+### 5. NumPy数组排序
+
+#### 5.1 数组排序
+
+排序是指将元素按照有序顺序进行排序
+
+有序序列是拥有与元素相对应顺序的任何序列，例如数字或字母、升序或者降序‘
+
+NumPy ndarray对象有一个sort()函数，该函数将对指定的数组进行排序
+
+```python
+arr = np.array([3,2,0,1])
+
+print(np.sort(arr))
+```
+
+```python
+arr = np.array(['banana','chery','apple'])
+
+print(np.sort(arr))
+```
+
+```python
+arr = np.array([True,False,True])
+
+print(np.sort(arr))
+```
+
+
+
+#### 5.2 对2-D数组进行排序
+
+如果是在二维数组上使用soft()方法，则将对两个数组进行排序
+
+```python
+arr = np.array([[3,2,4],[5,0,11]])
+print(np.sort(arr))
+```
+
+
+
+
+
+### 6. NumPy 数组过滤
+
+
+
+#### 6.1 数组过滤
+
+从现有数组中取出一些元素，并从中创建新数组，被称为过滤
+
+在NumPy中，我们使用布尔索引列表来过滤数组
+
+布尔索引是与数组中索引相对应的布尔值列表
+
+如果索引处的值为True，则该元素包含在过滤后的数组中。如果索引处的值为false，则该元素将从过滤后的数组中排除
+
+```python
+arr = np.array([61,62,63,64,65])
+x = [True,False,True,False,True]
+newarr = arr[x]
+print(newarr)
+```
+
+
+
+#### 6.2 创建过滤器数组
+
+上个例子中，我们对True和False值进行了硬编码，但通常的用途是根据条件创建过滤器数组
+
+```python
+# 创建一个仅返回大于62的值的过滤器数组
+arr = np.array([61,62,63,64,65])
+
+# 创建一个空列表
+filter_arr =  []
+
+# 遍历arr中的每个元素
+for element in arr:
+    # 如果元素大于62，则值设为True，否则False
+    if element > 62:
+        filter_arr.append(True)
+    else:
+        filter_arr.append(False)
+        
+newarr = arr[filter_arr]
+
+print(filter)
+print(newarr)
+```
+
+
+
+#### 6.3 直接从现有数组中创建过滤器
+
+上例是NumPy中非常常见的任务，NumPy提供了解决问题的更好方法
+
+我们可以再条件中直接替换数据，而不是iterable变量。
+
+```python
+arr = np.array([61,62,63,64,65])
+
+filter_arr = arr > 62
+newarr = arr[filter_arr]
+
+print(filter_arr)
+print(newarr)
+```
+
+
+
+# Python Pandas
+
+## Quick Start
+
+```bash
+!pip install pandas
+```
+
+```python
+import numpy as np
+import pandas as pd
+```
+
+
+
+## 生成对象
+
+```python
+# 用列表生成Series
+s = pd.Series([1,3,5],mp.nan,6,8)
+s
+```
+
+
+
+```python
+# 用Series、字典、对象生成DataFrame
+df2 = pd.DataFrame({
+    'A':1.,
+    'B':pd.Timestamp('20130102'),
+    'C':pd.Series(1,index= list(range(4)),dtype='float32'),
+    'D':np.array([3]*4,dtype='int'),
+    'E':np.Categorical(["test"],["train"],["test"],["train"]),
+    'F':'foo'
+})
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Python Seaborn
