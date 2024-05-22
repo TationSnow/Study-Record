@@ -1949,7 +1949,7 @@ print(newarr)
 
 # Python Pandas
 
-## Quick Start
+## Quick Start - 快速开始
 
 ```bash
 !pip install pandas
@@ -1962,7 +1962,7 @@ import pandas as pd
 
 
 
-## 生成对象
+## Generate Object - 生成对象
 
 ```python
 # 用列表生成Series
@@ -1983,6 +1983,34 @@ df2 = pd.DataFrame({
     'F':'foo'
 })
 ```
+
+```python
+# 用含日期索引和标签、NumPy数组生成DataFrame
+# 创建出一个数据集 周期6次 会生成6行数据
+d = pd.date_range('20130101',periods=6)
+d
+```
+
+```python
+# 创建一个6行4列的一个矩阵 行分别为A、B、C、D
+df = pd.DataFrame(np.random.randn(6,4),index=d,columns=list('ABCD'))
+```
+
+
+
+## Check Data - 查看数据
+
+```python
+# 查看DataFrame列的数据
+df2.dtypes
+```
+
+```python
+# 查看DataFrame头部和尾部的数据
+
+```
+
+
 
 
 
