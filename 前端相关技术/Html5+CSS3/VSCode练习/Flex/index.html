@@ -1,0 +1,106 @@
+<html>
+
+<head>
+    <title>Flex</title>
+    <style>
+        /* 弹性容器 */
+        /* .box { */
+            /* height: 300px; */
+            /* border: 1px solid #000; */
+            /* 设置为Flex弹性容器 */
+            /* display: flex; */
+            /* 主轴对齐方式 */
+            /* justify-content: space-between; */
+            /* justify-content: center; */
+            /* justify-content: flex-start; */
+            /* justify-content: flex-end; */
+            /* justify-content: space-around; */
+            /* justify-content: space-evenly; */
+            /* 侧轴对齐方式 */
+            /* align-items: flex-end; */
+            /* align-items: flex-start; */
+            /* align-items: stretch; */
+            /* align-items: center; */
+        /* } */
+
+        /* 弹性盒子：沿着主轴方向进行排列 */
+        /* 弹性盒子在侧轴方向没有尺寸才能进行拉伸 */
+        /* .box div{
+            /* float: left; 
+            /* margin: 50px; 
+            width: 200px;
+            height: 100px;
+            background-color: pink;
+            
+        }*/
+
+        /* 设置第奇数div，侧轴end，偶数start */
+        /* .box div:nth-child(2n){
+            align-self: flex-start;
+        }
+        .box div:nth-child(2n-1){
+            align-self: flex-end;
+        } */
+
+
+        /* 明日方舟赤东H5练习 */
+        .box{
+            border: 1px solid black;
+            height: 800px;
+            width: 800px;
+            background-color: gray;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .box div:nth-child(1){
+            height: 600px;
+            width: 600px;
+            background-image: url("Image.png");
+            background-size: cover;
+
+        }
+        .box div:nth-child(2){
+            height: 100px;
+            width: 600px;
+            background-color: red;
+            box-shadow: 5px 5px 50px 1px black ;
+            text-align: center;
+            font-family: "楷体";
+            font-weight: bold;
+            font-size: 24px;
+            line-height:50px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <!-- <div class="box">
+        <div>1</div>
+        <div>2</div>
+        <div>3</div>
+        
+        <div>1</div>
+        <div>2</div>
+        <div>3</div>
+    </div> -->
+
+    <div class="box">
+        <div> </div>
+        <div> 明日方舟<br />
+            赤冬
+        </div>
+    </div>
+    <script>
+        let a;
+        let b;
+        a = prompt('请输入第一个数字')
+        b = prompt('请输入第二个数字')
+
+        alert('计算结果是：' + (Number(a) + Number(b)))
+    </script>
+</body>
+
+</html>
