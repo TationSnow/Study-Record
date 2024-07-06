@@ -644,7 +644,12 @@ sudo shutdown -c
 
 ### Mysql 8.0
 
+[Ubuntu下载安装配置MySQL数据库(超详细配视频)_ubuntu下载mysql-CSDN博客](https://blog.csdn.net/2301_77311375/article/details/135888253)
 
+1. 输入命令	sudo apt install -y mysql-server mysql-client libmysqlclient-dev
+2. 查看初始密码 sudo cat /etc/mysql/debian.cnf
+3. 登录mysql mysql -u 用户名 -p 
+4. 设置root账户密码（密码以123456为例）ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '123456';
 
 ## 常见Ubuntu问题解决方案
 

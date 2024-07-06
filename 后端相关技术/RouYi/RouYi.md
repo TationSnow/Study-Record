@@ -77,6 +77,54 @@ devServer: {
   },
 ```
 
+## 功能列表
+
+| 功能                 | 描述                                                         | 快捷键    |
+| -------------------- | ------------------------------------------------------------ | --------- |
+| 热部署               | 若依自带了热部署插件，只要没有新文件创建都可以使用           | Ctrl + F9 |
+| Spring Security 加密 |                                                              |           |
+| MyBatis              | MyBatis提供了嵌套查询功能 |           |
+
+
+
+### MyBatis 
+
+
+
+1. resultMap 手动封装映射
+
+   1. ```xml
+      <resultMap id="映射名称" type="实体类类型">
+      	<result property="实体类属性名1" column="数据库查询返回的字段列1" />
+      	<result property="实体类属性名2" column="数据库查询返回的字段列2" />
+      	<result property="实体类属性名3" column="数据库查询返回的字段列3" />
+      	<result property="实体类属性名4" column="数据库查询返回的字段列4" />
+      	<result property="实体类属性名5" column="数据库查询返回的字段列5" />
+      </resultMap>
+      ```
+
+2. association 多对一查询
+
+   1. ```xml
+      <resultMap id="映射名称" type="实体类类型">
+      	<result property="实体类属性名1" column="数据库查询返回的字段列1" />
+      	<result property="实体类属性名2" column="数据库查询返回的字段列2" />
+          <association property="实体类属性对象名1" javaType="实体类属性对象类型1" column="要查询的实体类属性对象中的外键属性名1" select="要查询的Mapper接口的全名+方法名">
+      </resultMap>
+      ```
+
+3. collection 一对多查询
+
+   1. ```XML
+      
+      ```
+
+手动映射封装：<resulutMap></resultMap>
+
+<association></association>
+
+<collection></collection>
+
 
 
 ## 二次开发
@@ -114,29 +162,39 @@ devServer: {
 
 
 
-## 题库系统
+## 若依框架修改器（一键修改包名等）
 
-
-
-架构分析：
-
-
-
-课程 一对多 题库
-
-
-
-题库  类型->  (单选、多选、材料、简答、论述)
+ [若依框架修改器V4-20230425 · Ricky/RuoYi-MT - Gitee.com](https://gitee.com/lpf_project/RuoYi-MT/releases/tag/V4-20230425)
 
 
 
 
 
+## 若依入门项目 帝可得
+
+1. 后端仓库地址：[dkd-parent: 帝可得后台管理系统 (gitee.com)](https://gitee.com/yudian1991/dkd-parent)
+2. 前端仓库地址：[dkd-vue: 帝可得前端 (gitee.com)](https://gitee.com/yudian1991/dkd-vue)
+3. Git克隆并初始化后端项目
+   1. admin - 修改yml文件
+4. MySQL导入与配置
+5. 启动Redis与配置
+6. 运行后端项目
+7. Git克隆并初始化前端项目
+8. 安装依赖
+9. 运行前端项目
 
 
-```mysql
 
-```
+
+
+### 区域改造
+
+1. 确定关联查询方案，并编写SQL
+2. 创建RegionVo
+3. 在RegionMapper和xml文件中添加查询Vo方法和sql
+4. 在RegionService接口和实现类中添加查询Vo方法
+5. 修改RegionController查询方法
+6. 修改前端视图组件 
 
 
 
