@@ -475,6 +475,43 @@ C --> D
 
 ## Docker  Compose
 
+
+
+### Ubuntu22.04安装
+
+安装Docker
+更新软件包，执行1、2
+安装最新版本的Docker CE（社区版），执行3
+验证Docker安装成功：Docker成功运行并显示“Hello from Docker!”，执行4
+xshell执行：
+
+```bash
+sudo apt update  #1
+sudo apt upgrade #2
+sudo apt install docker-ce docker-ce-cli containerd.io #3
+sudo docker run hello-world #4
+```
+
+
+安装Docker-compose
+
+点击https://github.com/docker/compose/releases/，找到与自己系统适配的版本。本文为Ubuntu22.04对应版本
+点击Assets，找到docker-compose-linux-x86_64点击下载
+xftp上传到服务器自己的文件夹中，执行1
+为二进制文件添加执行权限，执行2
+验证Docker Compose是否已正确安装并查看其版本号，执行3
+我是下载到本地文件夹，之后用xftp上传到指定文件夹中，之后使用sudo命令移动到/usr/local/bin目录下。用网络直接在服务器上下载太太太慢了，还出现了下载中断的现象，白费时间，有的镜像网站也是有点问题
+
+xshell执行：
+
+```bash
+sudo mv docker-compose-linux-x86_64 /usr/local/bin/docker-compose #1
+sudo chmod +x /usr/local/bin/docker-compose #2
+docker-compose --version #3
+```
+
+
+
 Docker Compose 通过一个单独的docker-compose.yml模板文件（YAML格式）来定义一组相关联的应用容器，帮助我们实现多个相互关联的Docker容器的快速部署。
 
 ```yml
@@ -524,6 +561,52 @@ docker compose [Option] [command]
 
 ## Docker 部署案例
 
+[Java——Linux使用Docker部署若依前后端分离版【保姆级教程】_若依 docker部署-CSDN博客](https://blog.csdn.net/Pan_peter/article/details/128807946)
+
+### MySQL 部署
+
+部署后需要在容器中进行设置
+
+```mysql
+mysql -u root -p
+
+use mysql;
+
+update user set host = '%' where user = 'root';
+
+ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'root';
+
+select user,host,plugin from user;
+
+flush privileges;
+```
+
+
+
+### Tomcat 部署
+
+
+
+### 若依项目部署
+
+```bash
+sudo docker pull openjdk:17
+docker pull mysql:8.0.19
+docker pull redis
+docker pull nginx
+docker pull node
+```
+
+docker cp /data/applications/nginx/html* nginx:/usr/share/nginx/html/
+
+#### 前端
+
+- 修改.env.production文件中的配置
+- 
+- 修改src/router/index.js，设置mode属性为hash
+- 
+- 执行bin\build.bat进行打包
+
 ### Java项目部署
 
 1. JavaSpring项目中，设置applicantion.yml文件，数据库连接地址最好不要设死
@@ -549,4 +632,19 @@ docker compose [Option] [command]
 2. 在SpringBoot右侧面Maven面板选择Lifecycle中的package打包选项
 
 3. ......
+
+```dockerfile
+docker run -d \
+-p 80:80 \
+-p 443:443 \
+--name knowledge-manage-nginx \
+--restart=always \
+-e TZ="Asia/Shanghai" \
+-v /data/applications/nginx/conf/nginx.conf:/etc/nginx/nginx.conf \
+-v /data/applications/nginx/conf/conf.d:/etc/nginx/conf.d \
+-v /data/logs/nginx:/var/log/nginx \
+-v /data/applications/nginx/html:/usr/share/nginx/html \
+-v /data/applications/nginx/cert:/etc/nginx/cert \
+nginx
+```
 

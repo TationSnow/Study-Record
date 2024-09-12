@@ -244,6 +244,87 @@ var option = {
 }
 ```
 
+### 直角坐标系常用配置
+
+直角坐标系图表：柱状图、折线图、散点图
+
+#### 网格 grid
+
+设置直角坐标系类型图表的网格
+
+- show
+- borderWidth
+- left
+- top
+- width
+- height
+
+```js
+var option = {
+    grid:{
+      show: true,
+      borderWidth: 10,
+      left: 10,
+      top: 10,
+      width: 100,
+      height: 200
+    },
+    title:{
+        text: '标题'
+    },
+    xAxis:{
+        type:'value',
+        scale:true
+    },
+    yAxis:{
+        type:'value',
+        scale:true
+    },
+    series:[
+        {
+            type:'scatter',
+            data: axisData,
+            type: 'effectScatter',
+            showEffectOn: 'emphasis' // render emphasis
+                rippleEffect: {
+                scale: 10
+            }
+        }
+    ]
+}
+```
+
+
+
+#### 坐标轴 axis
+
+坐标轴分为x轴和y轴
+
+一个grid中最多有两种位置的x轴和y轴
+
+#### 类型 type
+
+- category：需要配合data属性来使用
+- value：不需要配合data属性
+
+#### 位置 position
+
+- xAxis：可以取值为top和buttom
+
+- yAxis：可以取值为left和right
+
+#### 区域缩放 dataZoom
+
+用于·区域缩放，对数据范围过滤，x和y轴都可以有
+
+dataZoom是一个数组，意味着可以配置多个区域缩放器
+
+- type：可以取值slider滑块、inside内置（依靠鼠标滚轮或者双指缩放）
+- xAxisIndex：指定要生效的轴，默认写0
+- yAxisIndex：指定要生效的轴，默认写0
+- start：设置滑块开始初始值
+- end：设置滑块结束初始值
+
 
 
 ### ECharts 常用图表
@@ -614,8 +695,6 @@ var option = {
 
 ##### 堆叠（在原有折线数据上进行堆叠展示）
 
-stack:all
-
 ```js
 var option = {
     title:{
@@ -674,4 +753,206 @@ var option = {
 散点图可以帮助我们推断出变量间的相关性
 
 比如身高和体重的关系
+
+##### 气泡图效果
+
+设置散点大小，可以设置为一个回调函数，动态决定不同散点大小
+
+symbolSize: 数值 / 回调函数
+
+```js
+var option = {
+    title:{
+        text: '标题'
+    },
+    xAxis:{
+        type:'value',
+        scale:true
+    },
+    yAxis:{
+        type:'value',
+        scale:true
+    },
+    series:[
+        {
+            type:'scatter',
+            data: axisData,
+    	    // symbolSize: 30,
+    	    symbolSize: function(arg) {
+    	    	console.log(arg)
+                var height = arg[0]
+                var weight = arg[1]
+                // 以体重为例子，大于28代表肥胖
+                // BMI = 体重 / （身高m*身高m）
+                var bmi = weight / (height * height)
+                if(bmi > 28){
+                    return 20
+                }
+                return 5
+    	    },
+            itemStyle:{
+                color:
+            }
+        }
+    ]
+}
+```
+
+
+
+
+
+设置散点颜色动画，可以设置为一个回调函数，动态决定
+
+itemStyle: {
+
+​	color:数值 / 回调函数
+
+}
+
+```js
+var option = {
+    title:{
+        text: '标题'
+    },
+    xAxis:{
+        type:'value',
+        scale:true
+    },
+    yAxis:{
+        type:'value',
+        scale:true
+    },
+    series:[
+        {
+            type:'scatter',
+            data: axisData,
+            itemStyle:{
+                color:function(arg){
+                    var height = arg.data[0] /100
+                    var weight = arg.data[1]
+                    // 以体重为例子，大于28代表肥胖
+                    // BMI = 体重 / （身高m*身高m）
+                    var bmi = weight / (height * height)
+                    if(bmi > 28){
+                        return 'red'
+                    }
+                    return 'green'
+                }
+            }
+        }
+    ]
+}
+```
+
+
+
+
+
+##### 涟漪动画效果
+
+
+
+type:effectScatter
+
+```js
+var option = {
+    title:{
+        text: '标题'
+    },
+    xAxis:{
+        type:'value',
+        scale:true
+    },
+    yAxis:{
+        type:'value',
+        scale:true
+    },
+    series:[
+        {
+            type:'scatter',
+            data: axisData,
+            type: 'effectScatter',
+            showEffectOn: 'emphasis' // render emphasis
+                rippleEffect: {
+                scale: 10
+            }
+        }
+    ]
+}
+```
+
+
+
+#### 饼图
+
+
+
+- 准备ECharts基本代码结构
+
+- 数据准备
+
+  - ```js
+    var pieData = [
+        {name:"淘宝",value:60},
+        {name:"京东",value:120}
+    ]
+    ```
+
+- 设置图标类型为pie
+
+
+
+##### 常见效果
+
+- label：显示饼图文字
+  - show
+  - formatter：接受字符串或回调函数
+- radius：接受数值或百分比或数组（内圆和外圆的半径）等
+- roseType: 参数radius，设置成南丁格尔图
+- selectMode：选中效果，参数有single和multiple
+- selectOffset：选中偏移量
+
+```js
+var option = {
+    series: [
+        {
+            type= 'pie',
+            data:pieData,
+            label:{
+            	show:true,
+            	formatter: function(arg){
+        			return arg.name
+        		}
+        	}，
+            radius: ['50%','70%'],
+            roseType:'radius',
+            selectMode:'single',
+            selectOffset:30
+        }
+    ]
+}
+```
+
+#### 地图
+
+[DataV.GeoAtlas地理小工具系列 (aliyun.com)](https://datav.aliyun.com/portal/school/atlas/area_selector)
+
+地图图标使用方式：
+
+- 百度地图API
+  - 需要申请百度ak
+- 矢量地图
+  - 需要准备矢量地图数据
+
+实现步骤
+
+- 准备基本代码结构
+- 准备中国矢量地图json文件，放到json/map目录下
+- 使用Ajax获取china.json
+- 在回调函数中网ECharts全局对象注册地图的json数据
+  - echarts.register('chinaMap',chinaJson)
+- 在geo下设置type和map
+
+
 

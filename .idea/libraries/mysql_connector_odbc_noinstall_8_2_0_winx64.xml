@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="mysql-connector-odbc-noinstall-8.2.0-winx64">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/前端相关技术/Html5+CSS3/VSCode练习/Work/assets/lib/mysql-connector-odbc-noinstall-8.2.0-winx64.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
