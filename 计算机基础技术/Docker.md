@@ -635,9 +635,9 @@ docker cp /data/applications/nginx/html* nginx:/usr/share/nginx/html/
 
 ```dockerfile
 docker run -d \
--p 80:80 \
+-p 2077:2077 \
 -p 443:443 \
---name knowledge-manage-nginx \
+--name manage-nginx \
 --restart=always \
 -e TZ="Asia/Shanghai" \
 -v /data/applications/nginx/conf/nginx.conf:/etc/nginx/nginx.conf \

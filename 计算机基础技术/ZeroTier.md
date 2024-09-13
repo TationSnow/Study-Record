@@ -82,7 +82,7 @@ https://www.bilibili.com/video/BV1Vh411F7Mr
 
    4. ```bash
       # 在stableEndpoints中填写公网IP和9993端口如：
-      "stableEndpoints": ["47.96.96.115/9993"]
+      "stableEndpoints": ["47.96.96.100/9993"]
       # 保存退出
       ```
 
@@ -168,7 +168,7 @@ https://www.bilibili.com/video/BV1Vh411F7Mr
 
    2. 完毕后一定要打开云服务器的3000端口!!!!
 
-   3. 使用公网IP+300端口的方式访问UI界面
+   3. 使用公网IP+3000端口的方式访问UI界面
 
    4. 初始账号为admin，密码为password
 
