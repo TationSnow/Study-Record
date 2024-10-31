@@ -636,7 +636,7 @@ docker cp /data/applications/nginx/html* nginx:/usr/share/nginx/html/
 ```dockerfile
 docker run -d \
 -p 2077:2077 \
--p 443:443 \
+-p 444:443 \
 --name manage-nginx \
 --restart=always \
 -e TZ="Asia/Shanghai" \
@@ -645,6 +645,22 @@ docker run -d \
 -v /data/logs/nginx:/var/log/nginx \
 -v /data/applications/nginx/html:/usr/share/nginx/html \
 -v /data/applications/nginx/cert:/etc/nginx/cert \
+nginx
+```
+
+```
+
+docker run -d \
+-p 80:80 \
+-p 443:443 \
+--name uniapp-nginx \
+--restart=always \
+-e TZ="Asia/Shanghai" \
+-v /data/applications/nginx-uniapp/conf/nginx.conf:/etc/nginx/nginx.conf \
+-v /data/applications/nginx-uniapp/conf/conf.d:/etc/nginx/conf.d \
+-v /data/logs/nginx-uniapp:/var/log/nginx \
+-v /data/applications/nginx-uniapp/html:/usr/share/nginx/html \
+-v /data/applications/nginx-uniapp/cert:/etc/nginx/cert \
 nginx
 ```
 
