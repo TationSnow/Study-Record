@@ -205,6 +205,7 @@ Nacos是目前国内企业中占比最多的注册中心组件。它是阿里巴
 - Eureka: Netflix公司出品，目前被集成在SpringCloud当中，一般用于]ava应用
 - Nacos:Alibaba公司出品，目前被集成在SpringCloudAlibaba中，一般用于Java应用
   - [Nacos 快速开始 | Nacos 官网](https://nacos.io/docs/latest/quickstart/quick-start/)
+  - https://nacos.io/zh-cn/
   - [什么是 Nacos | Nacos](https://nacos.io/zh-cn/docs/what-is-nacos)
 - Consu:HashiCorp公司出品，目前集成在SpringCloud中，不限制微服务语言
 
@@ -212,33 +213,169 @@ Nacos是目前国内企业中占比最多的注册中心组件。它是阿里巴
 
 ### 服务注册
 
-
-
-```tex
-PREFER_HOST_MODE=hostname
-MODE=standalone
-SPRING_DATASOURCE_PLATFORM=mysql
-MYSQL_SERVICE_HOST=数据库所在IP地址
-MYSQL_SERVICE_DB_NAME=mysql
-MYSQL_SERVICE_PORT=3306
-MYSQL_SERVICE_USER=root
-MYSQL_SERVICE_PASSWORD=123456
-MYSQL_SERVICE_DB_PARAM=characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
-```
+[docker安装nacos，并使用mysql进行存储配置_nacos1.4.2 mysql-CSDN博客](https://blog.csdn.net/qq_36608681/article/details/118306998)
 
 
 
+1. 引入Nacos依赖
 
+   1. ```xml
+      <!--nacos 服务注册发现-->
+      <dependency>
+          <groupId>com.alibaba.cloud</groupId>
+          <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+      </dependency>
+      ```
 
-```bash
-docker run -d --name nacos --env-file ./custom.env -p 8848:8848 -p 9848:9848 -p 9849:9849 --restart=always nacos/nacos-server -e JVM_XMS=256m -e -e MODE=standalone
-```
+2. 配置nacos地址
 
-
-
-
+   1. ```yaml
+      spring:
+      	application:
+      		name: item-service #服务名称
+      	cloud:
+      		nacos:
+      			discovery:
+                                      server-addr: 192.168.150.101:8848 # Nacos地址
+                                      namespace: public # 注意地址需要和Nacos控制台中命名空间保持一致
+      ```
+3. 可能出现的问题：
+   
+   4. [nacos注册成功，服务列表却看不到_nacos注册服务不显示-CSDN博客](https://blog.csdn.net/j1823339524/article/details/137864365)
 
 ### 服务发现
 
+消费者需要连接nacos以拉取和订阅服务，因此服务发现的前两步与服务注册是一样，后面再加上服务调用即可：
+
+1. 引入nacos discovery依赖
+
+2. 配置之nacos地址
+
+3. 服务发现
+
+   1. ```java
+      private final DiscoveryClient discoveryclient;
+      
+      private void handleCartItems(List<CartV0>vos){
+          //1.根据服务名称，拉取服务的实例列表
+          List<ServiceInstance>instances = discoveryClient.getInstances("item-service");
+          //2.负载均衡，挑选一个实例
+          ServiceInstance instance = instances.get(RandomUtil.randomInt(in0stances.size()));
+          //3.获取实例的IP和端口
+          URI uri = instance.getUri();
+          //4. 略
+      }
+      ```
 
 
+
+
+
+## Open Feign
+
+
+
+### 快速入门
+
+OpenFeiqn是一个声明式的http客户端，是SpringCloud在Eureka公司开源的Feiqn基础上改造而来。官方地址:
+
+https://github.com/openFeign/feign
+
+其作用就是基于SpringMVC的常见注解，帮我们优雅的实现http请求的发送。
+
+
+
+OpenFeign已经被SpringCloud自动装配，实现起来非常简单:
+
+1. 引入依赖
+
+   1. ```xml
+      
+              <!--OpenFeign-->
+              <dependency>
+                  <groupId>org.springframework.cloud</groupId>
+                  <artifactId>spring-cloud-starter-openfeign</artifactId>
+              </dependency>
+              <!--负载均衡-->
+              <dependency>
+                  <groupId>org.springframework.cloud</groupId>
+                  <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+              </dependency>
+      ```
+   
+2. 通过@EnableFeignClients注解，启用OpenFeign功能
+
+   1. ```java
+      @EnableFeignClients
+      @MapperScan("com.hmall.cart.mapper")
+      @SpringBootApplication
+      public class CartApplication { ... }
+      ```
+   
+3. 编写FeignClient
+
+   1. ```java
+      
+      @FeignClient(value="item-service")
+      public interface ItemClient {
+      
+          @GetMapping("/items")
+          List<ItemDTO> queryItemByIds(@RequestParam("ids") Collection<Long> ids);
+      }
+      ```
+   
+4. 使用FeignClient，实现远程调用
+
+   1. ```java
+    private final ItemClient itemClient;
+      ```
+
+   2. ```java
+              // 使用OpenFeign获取信息
+              List<ItemDTO> items = itemClient.queryItemByIds(itemIds);
+      ```
+
+
+### 连接池
+
+OpenFeign对Http请求做了优雅的伪装，不过其底层发起http请求，依赖于其它的框架。这些框架可以自己选择，包括以下三种:
+
+- HttpURLConnection:默认实现，不支持连接池
+- Apache HttpClient:支持连接池
+- OKHttp:支持连接池
+
+具体源码可以参考FeignBlockingLoadBalancerClient类中的delegate成员变量
+
+
+
+OpenFeign整合OKHttp的步骤如下:
+
+1. 引入依赖
+
+   1. ```xml
+              <!--OK Http-->
+              <dependency>
+                  <groupId>io.github.openfeign</groupId>
+                  <artifactId>feign-okhttp</artifactId>
+              </dependency>
+      ```
+
+2. 在yaml文件中打开开关
+
+   1. ```yaml
+      feign:
+        okhttp:
+          enabled: true
+      ```
+
+
+
+
+
+### 最佳实践
+
+
+
+
+
+### 日志

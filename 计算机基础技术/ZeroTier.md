@@ -1,7 +1,13 @@
 ## Ubuntu安装
 
+两者取其一
+
 ```bash
 curl -s https://install.zerotier.com | sudo bash
+```
+
+```bash
+sudo apt install zerotier-one
 ```
 
 
